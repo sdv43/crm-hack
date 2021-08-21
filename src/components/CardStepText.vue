@@ -1,5 +1,8 @@
 <template>
   <section :class="$style.root">
+    <div :class="$style.label">
+      Вопрос:
+    </div>
     <p :class="$style.text">
       Да, можем предложить щебень по 500 руб., но объем отгрузки будет от 30 тонн.
     </p>
@@ -14,7 +17,10 @@ export default {
 
 <style lang="scss" module>
 .root {
-  @apply p-md;
+}
+
+.label {
+  @apply mb-sm text-sm text-gray-500;
 }
 
 .text {

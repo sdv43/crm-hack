@@ -14,10 +14,10 @@ export default {
 
 <style lang="scss" module>
 .root {
-  @apply flex justify-center flex-wrap gap-md;
+  @apply flex justify-start flex-wrap gap-md;
 }
 
 .button {
-  @apply bg-white text-black rounded shadow-md py-sm p-md text-xs font-medium;
+  @apply bg-white text-black rounded-lg shadow-md py-sm p-lg text-sm font-medium;
 }
 </style>

@@ -1,8 +1,13 @@
 <template>
   <section :class="$style.root">
-    <CardStepHeader :class="$style.header"/>
-    <CardStepText :class="$style.text"/>
-    <CardStepActions :class="$style.actions"/>
+    <CardHeader/>
+
+    <div :class="$style.content">
+      <CardStepHeader :class="$style.header"/>
+      <CardStepText :class="$style.text"/>
+      <CardStepActions/>
+      <CardStepActionsCommon :class="$style['actions-common']"/>
+    </div>
   </section>
 </template>
 
@@ -10,25 +15,33 @@
 import CardStepHeader from '@/components/CardStepHeader.vue';
 import CardStepText from '@/components/CardStepText.vue';
 import CardStepActions from '@/components/CardStepActions.vue';
+import CardHeader from '@/components/CardHeader.vue';
+import CardStepActionsCommon from '@/components/CardStepActionsCommon.vue';
 
 export default {
   name: 'CardStep',
-  components: { CardStepActions, CardStepText, CardStepHeader },
+  components: {
+    CardStepActionsCommon,
+    CardHeader,
+    CardStepActions,
+    CardStepText,
+    CardStepHeader,
+  },
 };
 </script>
 
 <style lang="scss" module>
 .root {
-  @apply min-h-full flex flex-col justify-start items-stretch rounded bg-gray-100 m-md p-md;
+  @apply min-h-full flex flex-col justify-start items-stretch;
 }
 
-.header {
-}
+.content {
+  @apply flex flex-col flex-grow rounded gap-xl p-xl;
 
-.text {
-  @apply my-xl;
-}
+  background-color: #eff4fb;
 
-.actions {
+  .actions-common {
+    @apply mt-auto;
+  }
 }
 </style>

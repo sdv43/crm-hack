@@ -1,9 +1,15 @@
 <template>
   <header :class="$style.root">
     <nav :class="$style.navigation">
-      <button>&larr; Пред. шаг</button>
-      <button>На первый шаг</button>
-      <button :class="$style['to-script-list']">К скписку скриптов</button>
+      <button :class="[$style.action, $style['to-prev-step']]">
+        &larr; пред. шаг
+      </button>
+      <button :class="$style.action">
+        на первый шаг
+      </button>
+      <button :class="[$style.action, $style['to-script-list']]">
+        к скписку скриптов
+      </button>
     </nav>
 
     <div v-show="false">
@@ -24,7 +30,13 @@ export default {
 }
 
 .navigation {
-  @apply flex gap-md w-full text-sm text-gray-500;
+  @apply flex gap-md w-full text-sm;
+
+  .action {
+    &:hover {
+      @apply underline;
+    }
+  }
 
   .to-script-list {
     @apply ml-auto;
@@ -39,6 +51,5 @@ export default {
   &::-webkit-progress-value {
     @apply bg-blue-400;
   }
-
 }
 </style>
