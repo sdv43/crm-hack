@@ -9,7 +9,6 @@
                 Enter count nodes
               </button>
               <input type="text" value="  integers" id="inputGenerateObjects" />
-
           </div>
           <div class="container_row">
             <canvas id="field" width="1100" height="400"></canvas>
@@ -40,7 +39,7 @@
   </section>
 </template>
 
-<script src="main.js">
+<script>
 export default {
   name: 'ScriptEditor',
 };
