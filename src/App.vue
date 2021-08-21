@@ -1,9 +1,13 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <router-view/>
 </template>
 
 <style lang="scss">
+html {
+  @apply h-full;
+}
 
+body {
+  @apply h-full;
+}
 </style>
