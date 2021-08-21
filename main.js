@@ -49,9 +49,9 @@ class TopSetting extends MainPage {
 
   handler_start() {
     document.body.addEventListener("click", function (e) {
-        if (e.target.id == "buttonGenerateObjects") {
-            TS.showInputGenerateObjects();
-          }
+      if (e.target.id == "buttonGenerateObjects") {
+        TS.showInputGenerateObjects();
+      }
       if (e.target.id == "buttonStartСalc") {
         document.getElementById("start_dropdown").classList.toggle("show");
       }
@@ -89,6 +89,30 @@ class BottomPanelTools extends MainPage {
     super();
   }
 
+  create_min_menu(new_div) {
+    let new_div_menu_dropdown = document.createElement("DIV");
+    new_div_menu_dropdown.setAttribute("id", "dropdown");
+    new_div.appendChild(new_div_menu_dropdown);
+    let new_div_menu_dropdown_btn = document.createElement("BUTTON");
+    new_div_menu_dropdown_btn.setAttribute("class", "interface");
+    new_div_menu_dropdown_btn.setAttribute("id", "buttonStartСalc");
+    new_div_menu_dropdown_btn.innerHTML = "+";
+    new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
+    let new_div_menu_start_dropdown = document.createElement("DIV");
+    new_div_menu_start_dropdown.setAttribute("id", "start_dropdown");
+    new_div_menu_start_dropdown.setAttribute("class", "dropdown-content");
+    new_div_menu_dropdown_btn.after(new_div_menu_start_dropdown);
+    let new_div_menu_a_strong_connect = document.createElement("A");
+    new_div_menu_a_strong_connect.setAttribute("id", "strong_connect");
+    new_div_menu_a_strong_connect.innerHTML = "Add Field";
+    new_div_menu_start_dropdown.appendChild(new_div_menu_a_strong_connect);
+    let new_div_menu_a_line_prog = document.createElement("A");
+    new_div_menu_a_line_prog.setAttribute("id", "line_prog");
+    new_div_menu_a_line_prog.innerHTML = "Delete";
+    new_div_menu_a_strong_connect.after(new_div_menu_a_line_prog);
+    return new_div;
+  }
+
   create_set_nodes(count_node) {
     let was_count_nodes = this.get_was_count_node;
     let need_count_nodes = was_count_nodes + parseInt(count_node);
@@ -116,6 +140,7 @@ class BottomPanelTools extends MainPage {
         new_br.after(new_p);
         new_p.after(new_div);
       }
+      new_div = this.create_min_menu(new_div);
       old_p.appendChild(new_div);
     }
     document.getElementById(
@@ -1065,121 +1090,4 @@ class Storages {
 }
 
 
-class PreflowFlowAlgorithm extends Storages {
-  constructor() {
-    super();
-  }
 
-  step_next_node(next_node_key, passed_nodes, count_nodes_graph, sum_previews) {
-    let max_weight_row = Number.MIN_VALUE;
-    let pred_index_max_weight_row = 1, index_max_weight_row = 1;
-    for (let j_pair_key_weight = 1; j_pair_key_weight < sessionStorage.getItem(next_node_key).length; j_pair_key_weight = j_pair_key_weight + 2) {
-      if (parseInt(sessionStorage.getItem(next_node_key).split(",")[j_pair_key_weight]) >= sessionStorage.getItem(next_node_key).split(",")[pred_index_max_weight_row] &&
-      parseInt(sessionStorage.getItem(next_node_key).split(",")[j_pair_key_weight]) > max_weight_row) {
-        pred_index_max_weight_row = index_max_weight_row;
-      }
-      if (parseInt(sessionStorage.getItem(next_node_key).split(",")[j_pair_key_weight]) > max_weight_row) {
-        max_weight_row = sessionStorage.getItem(next_node_key).split(",")[j_pair_key_weight];
-        index_max_weight_row = j_pair_key_weight;
-      }
-    }
-    next_node_key = sessionStorage.getItem(next_node_key).split(",")[index_max_weight_row - 1];
-    sum_previews = parseInt(sum_previews) + parseInt(sessionStorage.getItem(next_node_key).split(",")[index_max_weight_row]);
-    sessionStorage.setItem(next_node_key, sessionStorage.getItem(next_node_key).split(",").splice(index_max_weight_row - 1, 2));
-    PL.print_log("         " + sum_previews, false);
-    PL.print_log("                       " + passed_nodes);
-    if (!passed_nodes.includes(next_node_key) && passed_nodes.length != count_nodes_graph && next_node_key == null){
-      passed_nodes.push(next_node_key);
-      this.step_next_node(next_node_key, passed_nodes, count_nodes_graph, sum_previews);
-    } else if (passed_nodes.includes(next_node_key) && passed_nodes.length != count_nodes_graph) {
-      this.step_next_node(sessionStorage.getItem(next_node_key).split(",")[pred_index_max_weight_row - 1], passed_nodes, count_nodes_graph, sum_previews);
-    } else {
-      PL.print_log("############# Finished chain nodes #############");
-        PL.print_log("Result calculating: " + sum_previews.toString());
-      PL.print_log("###################MA###o#i######################");
-    }
-  }
-}
-
-var PFA = new PreflowFlowAlgorithm();
-
-
-class ConnectComponentSearchAlgorithm extends Storages {
-  constructor(layers_cluster, passed_nodes) {
-    super();
-    this.layers_cluster = layers_cluster;
-    this.passed_nodes = passed_nodes;
-  }
-
-  marker_deep_passage(current_node, num_layer) {
-    let view_nodes = SN.select_nodes_save();
-    for (let i = 0; i < view_nodes.length; i++) {
-      if (view_nodes[i].dataset.id == current_node) {
-        view_nodes[i].setAttribute("class", "node draggable field mark save comp");
-        view_nodes[i].style.border = "5px solid rgba(" +
-        (255 * (parseInt(num_layer)) / (parseInt(num_layer) + 1)).toString() + ", " +
-        (255 * (parseInt(num_layer)) / (parseInt(num_layer) + 1)).toString() + ", " +
-        (150 * (parseInt(num_layer)) / (parseInt(num_layer) + 1)).toString() + ", 0.8) !important";
-        break;
-      }
-    }
-    this.passed_nodes.push(current_node);
-  }
-
-  check_available_node_clusters(node) {
-    for (let i = 0; i < this.layers_cluster.length; i++) {
-      if (this.layers_cluster[i].includes(node)) {
-        return i;
-      }
-    }
-    return false;
-  }
-
-  allocation_node_layers(node) {
-    if (this.check_available_node_clusters(node) == false) {
-      this.layers_cluster.push([]);
-      this.layers_cluster[this.layers_cluster.length - 1].push(node);
-    } else {
-      this.layers_cluster[this.check_available_node_clusters(node)].push(node);
-    }
-    this.marker_deep_passage(node, this.check_available_node_clusters(node));
-  }
-
-  depth_first_search() {
-    this.pumping_sessionStorage(3, true);
-    let row, current_node, k;
-    for (let i = 0; i < this.get_values_sessionStorage.length; i++) {
-      row = this.get_values_sessionStorage[i].split(",");
-      this.allocation_node_layers(sessionStorage.key(i));
-      for (let j = 0; j < row.length - 1; j = j + 2) {
-        current_node = row[j];
-        k = 0;
-        this.allocation_node_layers(current_node);
-        while (!this.passed_nodes.includes(current_node) && k < sessionStorage.getItem(current_node).split(",").length) {
-          current_node = sessionStorage.getItem(current_node).split(",")[k];
-          k = k + 2;
-        }
-      }
-    }
-  }
-}
-
-var CCSA = new ConnectComponentSearchAlgorithm([[]], []);
-
-
-class PrintLog {
-  constructor(content) {
-    this.content = content;
-  }
-
-  print_log(extends_content, carry=true) {
-    this.content = this.content + extends_content;
-    if (carry == true || Number.isInteger(parseInt(carry))) {
-      if (carry == true) { carry = 1; }
-      this.content = this.content + "\n".repeat(parseInt(carry));
-    }
-    document.getElementById("textarea").innerHTML = this.content;
-  }
-}
-
-var PL = new PrintLog("");
