@@ -94,7 +94,7 @@ class BottomPanelTools extends MainPage {
     new_div_menu_dropdown.setAttribute("id", "dropdown");
     new_div.appendChild(new_div_menu_dropdown);
     let new_div_menu_dropdown_btn = document.createElement("BUTTON");
-    new_div_menu_dropdown_btn.setAttribute("class", "interface");
+    new_div_menu_dropdown_btn.setAttribute("class", "card");
     new_div_menu_dropdown_btn.setAttribute("id", "buttonStartСalc");
     new_div_menu_dropdown_btn.innerHTML = "+";
     new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
@@ -407,7 +407,7 @@ class PopUp extends Data {
     let display_popup = document.createElement("DIV");
 
     if (value != null) {
-      display_popup.textContent = "Wt:" + parseInt(value).toString();
+      display_popup.textContent = parseInt(value).toString();
     }
     for (let key of Object.keys(localStorage)) {
       if (key.toString() == node.dataset.id.toString()) {
@@ -418,30 +418,14 @@ class PopUp extends Data {
 
     display_popup.setAttribute("class", "display_popup");
     node.appendChild(display_popup);
-    display_popup.style.top =
-      (
-        10 - parseFloat(node.offsetHeight) -
-        parseFloat(display_popup.offsetHeight) / 2
-      ).toString() + "px";
-    display_popup.style.left =
-      (
-        parseFloat(node.offsetWidth) / 2 -
-        parseFloat(display_popup.offsetWidth) / 2
-      ).toString() + "px";
+    display_popup.style.top = "20px";
+    display_popup.style.left = "10px";
 
     let popup_exit = document.createElement("DIV");
     popup_exit.setAttribute("class", "exit_popup");
     node.appendChild(popup_exit);
-    popup_exit.style.top =
-      (
-        10 - parseFloat(node.offsetHeight) -
-        parseFloat(display_popup.offsetHeight) / 2
-      ).toString() + "px";
-    popup_exit.style.left =
-      (
-        parseFloat(display_popup.offsetWidth) -
-        2 * parseFloat(popup_exit.offsetWidth) + 10
-      ).toString() + "px";
+    popup_exit.style.top = "20px";
+    popup_exit.style.left = "10px";
 
     for (let i = 0; i < this.select_display_body().length; i++) {
       this.select_display_body()[i].parentElement.setAttribute(
@@ -505,7 +489,7 @@ class PopUp extends Data {
     popup_body.setAttribute("class", "popup_body");
     build_start.appendChild(popup_body);
     popup_body.style.top =
-      (-parseFloat(popup_body.offsetHeight) + offset  ).toString() + "px";
+      (-parseFloat(popup_body.offsetHeight) + offset).toString() + "px";
     popup_body.style.left =
       (
         parseFloat(build_start.offsetWidth) / 2 -
