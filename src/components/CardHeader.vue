@@ -25,10 +25,15 @@
         <img v-show="!mute" src="@/assets/icons/mic_white_24dp.svg" alt="null"/>
       </button>
       <button
-        :class="[$style.action, $style.end]"
-        @click="callEnd"
+        :class="[
+          $style.action,
+          iconCall ? $style.call : $style.end,
+          iconOpacity ? $style.opacity : '',
+        ]"
+        @click="callToggle"
       >
-        <img src="@/assets/icons/call_end_white_24dp.svg" alt="null"/>
+        <img v-show="iconCall" src="@/assets/icons/call_white_24dp.svg" alt="null"/>
+        <img v-show="!iconCall" src="@/assets/icons/call_end_white_24dp.svg" alt="null"/>
       </button>
     </div>
   </header>
@@ -36,6 +41,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import {
+  CALL_FINISHED, CALL_TALKING, CALL_ENDING, CALL_IN_PROGRESS,
+} from '@/store/modules/operatorCard/constants';
 
 export default {
   name: 'CardHeader',
@@ -53,11 +61,20 @@ export default {
     ]),
 
     ...mapState('operatorCard', [
+      'callStatus',
       'phoneNumber',
     ]),
 
     clientFullName() {
       return `${this.name} ${this.lastName}`;
+    },
+
+    iconCall() {
+      return [CALL_FINISHED, CALL_IN_PROGRESS].includes(this.callStatus);
+    },
+
+    iconOpacity() {
+      return [CALL_ENDING, CALL_IN_PROGRESS].includes(this.callStatus);
     },
   },
 
@@ -66,8 +83,20 @@ export default {
       this.mute = !this.mute;
     },
 
-    callEnd() {
-      alert('End call...');
+    callToggle() {
+      if (this.callStatus === CALL_TALKING) {
+        this.$store.state.operatorCard.callStatus = CALL_ENDING;
+
+        setTimeout(() => {
+          this.$store.state.operatorCard.callStatus = CALL_FINISHED;
+        }, 2500);
+      } else if (this.callStatus === CALL_FINISHED) {
+        this.$store.state.operatorCard.callStatus = CALL_IN_PROGRESS;
+
+        setTimeout(() => {
+          this.$store.state.operatorCard.callStatus = CALL_TALKING;
+        }, 2500);
+      }
     },
   },
 };
@@ -101,6 +130,14 @@ export default {
     img {
       height: 20px;
       width: auto;
+    }
+
+    &.opacity {
+      @apply opacity-50;
+    }
+
+    &.call {
+      @apply bg-green-500;
     }
 
     &.end {
