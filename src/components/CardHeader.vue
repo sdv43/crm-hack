@@ -75,7 +75,7 @@ export default {
 
 <style lang="scss" module>
 .root {
-  @apply flex justify-between items-center p-xl;
+  @apply flex justify-between items-center py-xl px-md;
 }
 
 .client {
@@ -86,7 +86,7 @@ export default {
   }
 
   .name {
-    @apply text-2xl font-medium;
+    @apply text-xl font-medium;
   }
 }
 
@@ -94,8 +94,9 @@ export default {
   @apply flex justify-end gap-md;
 
   .action {
-    @apply flex justify-center items-center p-sm rounded-full;
-    @apply border-0 border-solid border-gray-500 shadow-md bg-gray-100 ;
+    @apply flex justify-center items-center p-sm rounded-full shadow-md;
+
+    background-color: #eff4fb;
 
     img {
       height: 20px;
