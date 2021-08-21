@@ -2,21 +2,32 @@
   <header :class="$style.root">
     <div :class="$style.client">
       <p :class="$style.phone">
-        Исходящий вызов на +7 916 304 23 44
+        Исходящий вызов на {{ phoneNumber }}
       </p>
 
-      <h1 :class="$style.name">Михаил Савельев</h1>
+      <h1 :class="$style.name">
+        {{ clientFullName }}
+      </h1>
     </div>
 
     <div :class="$style.actions">
       <button :class="$style.action">
         <img src="@/assets/icons/phone_forwarded_white_24dp.svg" alt="null"/>
       </button>
-      <button :class="$style.action">
-        <img src="@/assets/icons/mic_white_24dp.svg" alt="null"/>
-<!--        <img src="@/assets/icons/mic_off_white_24dp.svg" alt="null"/>-->
+      <button
+        :class="[
+        $style.action,
+        mute ? $style['mic-off'] : ''
+        ]"
+        @click="micToggle"
+      >
+        <img v-show="mute" src="@/assets/icons/mic_off_white_24dp.svg" alt="null"/>
+        <img v-show="!mute" src="@/assets/icons/mic_white_24dp.svg" alt="null"/>
       </button>
-      <button :class="[$style.action, $style.end]">
+      <button
+        :class="[$style.action, $style.end]"
+        @click="callEnd"
+      >
         <img src="@/assets/icons/call_end_white_24dp.svg" alt="null"/>
       </button>
     </div>
@@ -24,13 +35,40 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
   name: 'CardHeader',
 
   data() {
     return {
+      mute: false,
     };
+  },
+
+  computed: {
+    ...mapState('client', [
+      'name',
+      'lastName',
+    ]),
+
+    ...mapState('operatorCard', [
+      'phoneNumber',
+    ]),
+
+    clientFullName() {
+      return `${this.name} ${this.lastName}`;
+    },
+  },
+
+  methods: {
+    micToggle() {
+      this.mute = !this.mute;
+    },
+
+    callEnd() {
+      alert('End call...');
+    },
   },
 };
 </script>
