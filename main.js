@@ -20,8 +20,8 @@ class TopSetting extends MainPage {
 
   handler_start() {
     document.body.addEventListener("click", function (e) {
-      if (e.target.id == "btnOptionsNode") {
-        document.getElementById("start_dropdown").classList.toggle("show");
+      if (e.target.id.startsWith("btnOptionsNode")) {
+        document.getElementById(e.target.id).classList.toggle("show");
       }
       if (e.target.id == "add_node") {
         new BottomPanelTools().create_set_nodes(1);
@@ -98,7 +98,7 @@ class BottomPanelTools extends MainPage {
     super();
   }
 
-  create_min_menu(new_div) {
+  create_min_menu(new_div, current_num_node) {
     let new_div_menu_dropdown = document.createElement("DIV");
     new_div_menu_dropdown.setAttribute("id", "dropdown");
     new_div.appendChild(new_div_menu_dropdown);
@@ -106,7 +106,7 @@ class BottomPanelTools extends MainPage {
     new_div_menu_dropdown = this.btn_create_new_field(new_div_menu_dropdown);
     let new_div_menu_dropdown_btn = document.createElement("BUTTON");
     new_div_menu_dropdown_btn.setAttribute("class", "card");
-    new_div_menu_dropdown_btn.setAttribute("id", "btnOptionsNode");
+    new_div_menu_dropdown_btn.setAttribute("id", "btnOptionsNode_" + current_num_node.toString());
     new_div_menu_dropdown_btn.innerHTML = "+";
     new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
     let new_div_menu_start_dropdown = document.createElement("DIV");
@@ -167,7 +167,7 @@ class BottomPanelTools extends MainPage {
         new_br.after(new_p);
         new_p.after(new_div);
       }
-      new_div = this.create_min_menu(new_div);
+      new_div = this.create_min_menu(new_div, i);
       old_p.appendChild(new_div);
     }
   }
