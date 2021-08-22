@@ -74,7 +74,6 @@ class Field extends MainPage {
 
   one_elem_click_processing(nodes_include) {
     for (let i = 0; i < nodes_include.length; i++) {
-      console.log(nodes_include[i]);
       if (nodes_include[i].hasAttribute("data-id")) {
         nodes_include[i].setAttribute(
           "class",
@@ -372,7 +371,7 @@ class PopUp extends Data {
     let display_popup = document.createElement("DIV");
 
     if (value != null) {
-      display_popup.textContent = parseInt(value).toString();
+      display_popup.textContent = value.toString();
     }
     for (let key of Object.keys(localStorage)) {
       if (key.toString() == node.dataset.id.toString()) {
@@ -448,8 +447,7 @@ class PopUp extends Data {
     }
   }
 
-  create_popup(e_target, offset) {
-    let build_start = e_target;
+  create_popup(build_start, offset) {
     let popup_body = document.createElement("DIV");
     popup_body.setAttribute("class", "popup_body");
     build_start.appendChild(popup_body);
@@ -553,8 +551,11 @@ class PopUp extends Data {
           this.remove_popup(true, e.target);
           this.delete_data(node);
           node.setAttribute("class", "node draggable field");
-          this.step_size_new_field_popup = 150;
-          this.create_popup(e.target.parentElement, this.step_size_new_field_popup);
+          this.step_size_new_field_popup = 100;
+          let node_bases = document.getElementsByClassName("node draggable");
+          for (let i = 0; i < node_bases.length; i++){
+            this.create_popup(node_bases[i], this.step_size_new_field_popup);
+          }
           break;
         } else if (
           e.target.className == "create_field_popup" &&
