@@ -20,16 +20,19 @@ class TopSetting extends MainPage {
 
   handler_start() {
     document.body.addEventListener("click", function (e) {
+      let num_option_node = e.target.id.split('_')[1];
+
       if (e.target.id.startsWith("btnOptionsNode")) {
-        document.getElementById(e.target.id).classList.toggle("show");
+        document.getElementById("start_dropdown_" + num_option_node).classList.toggle("show");
       }
+
       if (e.target.id == "add_node") {
         new BottomPanelTools().create_set_nodes(1);
       } else if (e.target.id == "delete_node") {
         console.log(2);
       }
 
-      if (e.target.parentElement.id == "start_dropdown" && !e.target.matches(".interface")) {
+      if (e.target.parentElement.id == "start_dropdown_" + num_option_node && !e.target.matches(".interface")) {
         let dropdowns = document.getElementsByClassName("dropdown-content");
         for (let i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].classList.contains('show')) {
@@ -110,7 +113,7 @@ class BottomPanelTools extends MainPage {
     new_div_menu_dropdown_btn.innerHTML = "+";
     new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
     let new_div_menu_start_dropdown = document.createElement("DIV");
-    new_div_menu_start_dropdown.setAttribute("id", "start_dropdown");
+    new_div_menu_start_dropdown.setAttribute("id", "start_dropdown_" + current_num_node.toString());
     new_div_menu_start_dropdown.setAttribute("class", "dropdown-content");
     new_div_menu_dropdown_btn.after(new_div_menu_start_dropdown);
     let new_div_menu_a_add_node = document.createElement("A");
