@@ -1,354 +1,39 @@
 <template>
-  <section>
-    <div class="container">
-      <div id="title">Design</div>
-      <div class="container_row">
-        <div class="container_col">
-          <div class="container_row">
-            <button class="interface" id="buttonGenerateObjects">
-                Enter count nodes
-              </button>
-              <input type="text" value="  integers" id="inputGenerateObjects" />
-          </div>
-          <div class="container_row">
-            <canvas id="field" width="1100" height="400"></canvas>
-            <canvas id="field_line" width="1100" height="400"></canvas>
-          </div>
-          <div class="container_row">
-            Count nodes in field: &nbsp;<span id="show_count_nodes_field"
-              >0</span
-            >
-            <button class="interface" id="deleted_all_edges">
-              Delete all edges
-            </button>
-            <button class="interface" id="deleted_set_nodes">
-              Delete all nodes
-            </button>
-          </div>
-        </div>
-        <div class="container_col">
-          <div id="init_date">
-            Init nodes &nbsp;(total:
-            <span id="show_total_count_nodes">0</span>)<br />
-            State nodes &nbsp;&nbsp;(now:
-            <span id="show_now_count_nodes">0</span>)
-          </div>
-        </div>
-      </div>
+  <section :class="$style.root">
+    <EditorHeader/>
+
+    <div :class="$style.editor">
+      <EditorSteps :class="$style.steps"/>
+      <EditorStepForm :class="$style['step-form']"/>
     </div>
   </section>
 </template>
 
 <script>
+import EditorHeader from '@/components/EditorHeader.vue';
+import EditorSteps from '@/components/EditorSteps.vue';
+import EditorStepForm from '@/components/EditorStepForm.vue';
+
 export default {
   name: 'ScriptEditor',
+  components: { EditorStepForm, EditorSteps, EditorHeader },
 };
 </script>
 
-<style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: rgb(226, 247, 237);
-  background-size: 100%;
-  font-weight: 600;
-  font-family: "Courier New", sans-serif;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
+<style lang="scss" module>
+.root {
+  @apply h-full flex flex-col items-stretch gap-md p-xl pt-0;
 }
 
-.container {
-  padding: 1% 1% 1% 1%;
-  margin: 1% 1% 1% 1%;
-}
+.editor {
+  @apply flex items-stretch flex-grow;
 
-.container_col {
-  padding: 0% 1% 0% 1%;
-  margin: 0% 1% 0% 1%;
-  flex: 30%;
-}
+  .steps {
+    @apply w-2/3;
+  }
 
-.container_row {
-  padding: 1% 0% 1% 0%;
-  margin: 1% 0% 1% 0%;
-  display: flex;
+  .step-form {
+    @apply w-1/3;
+  }
 }
-
-.node {
-    width: 150px;
-    height: 150px;
-    float: right;
-    background-size: 100%;
-    color: rgb(255, 255, 255);
-    text-align: center;
-    font-weight: 600;
-    line-height: 30px;
-    margin: 5px;
-    background-color: white;
-    border-radius: 5%;
-    z-index: 1;
-}
-
-.draggable {
-  cursor: pointer;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.25);
-  margin: 0 !important;
-}
-
-.mark {
-  border: 4px solid rgba(255, 150, 150, 0.8);
-}
-
-.save {
-  border: 5px solid rgba(150, 255, 150, 0.8);
-}
-
-.comp {
-  border: 5px solid rgba(255, 255, 150, 0.8);
-}
-
-#inputGenerateObjects {
-  width: 150px;
-  font-weight: 300;
-  opacity: 0.5;
-}
-
-#deleted_set_nodes {
-  margin-left: 20px;
-  margin-right: 0;
-}
-#deleted_set_nodes:hover {
-  background-color: rgba(255, 150, 150, 0.5);
-}
-
-#deleted_all_edges {
-  margin-left: auto;
-  margin-right: 0;
-}
-#deleted_all_edges:hover {
-  background-color: rgba(255, 150, 150, 0.5) !important;
-}
-
-#field {
-  z-index: 1;
-}
-
-#field_line {
-  z-index: 0;
-  position: absolute;
-  top: 177.5px;
-  left: 59px;
-  transition: 1s;
-}
-
-#init_date {
-  margin-left: 5%;
-  border-bottom: 2px solid rgb(220, 220, 220);
-}
-
-#title {
-  text-align: left;
-  margin: 0% 0% 0% 0%;
-  font-size: x-large;
-}
-
-.display_popup {
-  position: absolute;
-  width: 60px;
-  height: 22.5px;
-  text-align: center;
-  font-weight: 600;
-  font-size: small;
-  color: rgb(0, 0, 0);
-  line-height: 25px;
-  border-radius: 5%;
-  box-shadow: 0px -1px 5px 2.5px rgba(0, 0, 0, 0.5);
-  background-color: rgba(150, 255, 150, 0.5);
-  z-index: 1;
-}
-
-.exit_popup {
-  width: 20px;
-  height: 8px;
-  position: absolute;
-  border-top-right-radius: 25%;
-  background-color: rgba(255, 150, 150, 0.5);
-  z-index: 2;
-}
-
-.popup_body {
-  position: absolute;
-  width: 120px;
-  height: 40px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 30px;
-  border-radius: 5%;
-  background-color: rgba(150, 150, 255, 0.5);
-  box-shadow: 0px -5px 5px 2.5px rgba(0, 0, 0, 0.5);
-  z-index: 1;
-}
-
-.popup_input {
-  position: absolute;
-  width: 50px;
-  height: 17px;
-  top: 10px;
-  left: 10px;
-}
-
-.popup_button {
-  position: absolute;
-  width: 42px;
-  height: 23px;
-  top: 10px;
-  left: 70px;
-}
-
-.display_weight {
-  position: absolute;
-  width: 140px;
-  height: 20px;
-  text-align: center;
-  font-weight: 600;
-  font-size: small;
-  color: rgb(0, 0, 0);
-  line-height: 20px;
-  border-radius: 5%;
-  box-shadow: 0px -1px 5px 2.5px rgba(0, 0, 0, 0.5);
-  background-color: rgba(150, 150, 150, 0.5);
-  z-index: 2;
-}
-
-.popup_weight {
-  position: absolute;
-  width: 165px;
-  height: 40px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 30px;
-  border-radius: 5%;
-  background-color: rgba(100, 100, 100, 0.5);
-  z-index: 2;
-}
-
-.weight_input_1 {
-  position: absolute;
-  width: 40px;
-  height: 17px;
-  top: 10px;
-  left: 10px;
-}
-
-.weight_input_2 {
-  position: absolute;
-  width: 40px;
-  height: 17px;
-  top: 10px;
-  left: 110px;
-}
-
-.weight_button {
-  position: absolute;
-  width: 45px;
-  height: 23px;
-  top: 10px;
-  left: 60px;
-}
-
-button.interface {
-  text-decoration: none;
-  outline: none;
-  display: inline-block;
-  margin: 0px 20px;
-  padding: 7.5px 10px;
-  /* width: 150px; */
-  font-weight: 600;
-  position: relative;
-  border: 2px solid rgba(150, 150, 255, 0.5);
-  color: rgb(0, 0, 0);
-  transition: 0.5s;
-}
-button.interface:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  margin: auto;
-  border: 2px solid rgba(0, 0, 0, 0);
-  transition: 0.5s;
-}
-button.interface:hover:after {
-  border-color: rgba(150, 150, 255, 0.5);
-  width: calc(100% - 20px);
-  height: calc(100% + 15px);
-}
-
-button.interface:hover {
-  background-color: rgba(150, 255, 150, 0.5);
-}
-
-#buttonStartСalc {
-  min-width: 10px;
-}
-#buttonStartСalc:hover:after {
-  height: calc(100% - 5px);
-  top: calc(45px);
-  width: calc(100% + 45px);
-  left: calc(-25px);
-  background-color: rgba(150, 150, 255, 0.5);
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: rgb(220, 220, 220);
-  min-width: 175px;
-  text-align: center;
-  overflow: auto;
-  box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.5);
-  z-index: 3;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 15px 20px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown a:hover {
-  background-color: rgba(150, 150, 255, 0.5);
-}
-
-.show {
-  display: block;
-}
-
-textarea {
-  width: 1450px;
-  height: 300px;
-  transition: 1s;
-  background: rgba(150, 150, 150, 0.5);
-  z-index: 3;
-}
-
-textarea:hover {
-  font-size: large;
-  background: rgb(220, 220, 220);
-}
-
 </style>
