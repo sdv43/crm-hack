@@ -7,10 +7,6 @@ class MainPage {
     return document.getElementsByClassName("node").length;
   }
 
-  get get_count_node() {
-    return document.getElementById("inputGenerateObjects").value;
-  }
-
   get get_now_count_node() {
     return new Field().object_inside.length;
   }
@@ -22,43 +18,12 @@ class TopSetting extends MainPage {
     this.count_node = count_node;
   }
 
-  showInputGenerateObjects() {
-    var button_input = document.getElementById("buttonGenerateObjects");
-    var input_val = document.getElementById("inputGenerateObjects");
-    if (
-      button_input.textContent == "push" ||
-      button_input.textContent == "append"
-    ) {
-      button_input.style.backgroundColor = "rgba(0,0,0,.5)";
-      input_val.style.display = "none";
-      button_input.textContent = "append";
-      new BottomPanelTools().create_set_nodes(parseInt(this.get_count_node));
-      let reset_value = function () {
-        button_input.textContent = "push";
-        button_input.style.backgroundColor = "rgba(150, 255, 150, 0.5)";
-        input_val.style.display = "inline";
-      };
-      setTimeout(reset_value, 500);
-    } else {
-      button_input.textContent = "push";
-      button_input.style.width = "150px";
-      input_val.setAttribute("value", this.count_node);
-      input_val.setAttribute("type", "number");
-    }
-  }
-
   handler_start() {
     document.body.addEventListener("click", function (e) {
-      if (e.target.id == "buttonGenerateObjects") {
-        TS.showInputGenerateObjects();
-      }
-      if (e.target.id == "buttonStartСalc") {
-        document.getElementById("start_dropdown").classList.toggle("show");
-      }
       if (e.target.id == "strong_connect") {
-        CCSA.depth_first_search();
+        console.log(2);
       } else if (e.target.id == "line_prog") {
-        console.log(3);
+        console.log(2);
       }
 
       if (e.target.parentElement.id == "start_dropdown" && !e.target.matches(".interface")) {
@@ -69,10 +34,6 @@ class TopSetting extends MainPage {
           }
         }
       }
-
-      if (e.target.id == "inputGenerateObjects") {
-        e.target.defaultValue = "";
-      }
     });
   }
 }
@@ -80,9 +41,55 @@ class TopSetting extends MainPage {
 var TS = new TopSetting(10);
 TS.handler_start()
 
+class Field extends MainPage {
+  constructor() {
+    super();
+  }
 
+  get rect_border_field() {
+    return document.getElementById("field").getBoundingClientRect();
+  }
 
+  get object_inside() {
+    let elems = document.getElementsByClassName("node draggable");
+    let include_elems = [];
+    for (let i = 0; i < elems.length; i++) {
+      let rect_elem = elems[i].getBoundingClientRect();
+      if (
+        this.rect_border_field.left < rect_elem.left &&
+        this.rect_border_field.right > rect_elem.right &&
+        this.rect_border_field.top < rect_elem.top &&
+        this.rect_border_field.bottom > rect_elem.bottom
+      ) {
+        include_elems.push(elems[i]);
+      }
+    }
+    return include_elems;
+  }
 
+  change_state_field() {
+    let nodes_include = this.object_inside;
+    this.one_elem_click_processing(nodes_include);
+  }
+
+  one_elem_click_processing(nodes_include) {
+    for (let i = 0; i < nodes_include.length; i++) {
+      console.log(nodes_include[i]);
+      if (nodes_include[i].hasAttribute("data-id")) {
+        nodes_include[i].setAttribute(
+          "class",
+          "node draggable field mark save"
+        );
+      } else if (nodes_include[i].children.length > 1) {
+        nodes_include[i].setAttribute("class", "node draggable field mark");
+      } else {
+        nodes_include[i].setAttribute("class", "node draggable field");
+      }
+    }
+  }
+}
+
+var F = new Field();
 
 class BottomPanelTools extends MainPage {
   constructor() {
@@ -93,6 +100,8 @@ class BottomPanelTools extends MainPage {
     let new_div_menu_dropdown = document.createElement("DIV");
     new_div_menu_dropdown.setAttribute("id", "dropdown");
     new_div.appendChild(new_div_menu_dropdown);
+    new_div_menu_dropdown = this.create_new_field(new_div_menu_dropdown);
+    new_div_menu_dropdown = this.btn_create_new_field(new_div_menu_dropdown);
     let new_div_menu_dropdown_btn = document.createElement("BUTTON");
     new_div_menu_dropdown_btn.setAttribute("class", "card");
     new_div_menu_dropdown_btn.setAttribute("id", "buttonStartСalc");
@@ -111,6 +120,22 @@ class BottomPanelTools extends MainPage {
     new_div_menu_a_line_prog.innerHTML = "Delete";
     new_div_menu_a_strong_connect.after(new_div_menu_a_line_prog);
     return new_div;
+  }
+
+  create_new_field(new_div_menu_dropdown){
+    let create_field_popup_btn = document.createElement("BUTTON");
+    create_field_popup_btn.setAttribute("class", "create_field_popup");
+    new_div_menu_dropdown.after(create_field_popup_btn);
+    create_field_popup_btn.innerHTML = "new field";
+    return new_div_menu_dropdown;
+  }
+
+  btn_create_new_field(new_dev_menu_dropdown){
+    let popup_button = document.createElement("BUTTON");
+    popup_button.setAttribute("class", "popup_button");
+    new_dev_menu_dropdown.appendChild(popup_button);
+    popup_button.innerHTML = '+';
+    return new_dev_menu_dropdown;
   }
 
   create_set_nodes(count_node) {
@@ -143,72 +168,11 @@ class BottomPanelTools extends MainPage {
       new_div = this.create_min_menu(new_div);
       old_p.appendChild(new_div);
     }
-    document.getElementById(
-      "show_total_count_nodes"
-    ).innerHTML = need_count_nodes;
-    document.getElementById("show_now_count_nodes").innerHTML =
-      this.get_was_count_node - this.get_now_count_node;
   }
 }
 
-class Field extends MainPage {
-  constructor() {
-    super();
-  }
 
-  get rect_border_field() {
-    return document.getElementById("field").getBoundingClientRect();
-  }
-
-  get object_inside() {
-    let elems = document.getElementsByClassName("node draggable");
-    let include_elems = [];
-    for (let i = 0; i < elems.length; i++) {
-      let rect_elem = elems[i].getBoundingClientRect();
-      if (
-        this.rect_border_field.left < rect_elem.left &&
-        this.rect_border_field.right > rect_elem.right &&
-        this.rect_border_field.top < rect_elem.top &&
-        this.rect_border_field.bottom > rect_elem.bottom
-      ) {
-        include_elems.push(elems[i]);
-      }
-    }
-    return include_elems;
-  }
-
-  change_state_field() {
-    this.view_count_elems_field();
-    let nodes_include = this.object_inside;
-    this.one_elem_click_processing(nodes_include);
-  }
-
-  one_elem_click_processing(nodes_include) {
-    for (let i = 0; i < nodes_include.length; i++) {
-      console.log(nodes_include[i]);
-      if (nodes_include[i].hasAttribute("data-id")) {
-        nodes_include[i].setAttribute(
-          "class",
-          "node draggable field mark save"
-        );
-      } else if (nodes_include[i].children.length > 1) {
-        nodes_include[i].setAttribute("class", "node draggable field mark");
-      } else {
-        nodes_include[i].setAttribute("class", "node draggable field");
-      }
-    }
-  }
-
-  view_count_elems_field() {
-    document.getElementById(
-      "show_count_nodes_field"
-    ).innerHTML = this.object_inside.length;
-    document.getElementById("show_now_count_nodes").innerHTML =
-      this.get_was_count_node - this.get_now_count_node;
-  }
-}
-
-var F = new Field();
+new BottomPanelTools().create_set_nodes(1);
 
 class SetNodes {
   constructor() {
@@ -380,6 +344,7 @@ var D = new Data();
 class PopUp extends Data {
   constructor() {
     super();
+    this.step_size_new_field_popup = 100;
   }
 
   select_display_body() {
@@ -483,8 +448,8 @@ class PopUp extends Data {
     }
   }
 
-  create_popup(e, offset, text_btn) {
-    let build_start = e.target;
+  create_popup(e_target, offset) {
+    let build_start = e_target;
     let popup_body = document.createElement("DIV");
     popup_body.setAttribute("class", "popup_body");
     build_start.appendChild(popup_body);
@@ -501,11 +466,6 @@ class PopUp extends Data {
     popup_input.setAttribute("class", "popup_input");
     popup_body.appendChild(popup_input);
     popup_input.focus();
-
-    let popup_button = document.createElement("BUTTON");
-    popup_button.setAttribute("class", "popup_button");
-    popup_body.appendChild(popup_button);
-    popup_button.innerHTML = text_btn;
 
     for (let i = 0; i < this.select_popup_body().length; i++) {
       this.select_popup_body()[i].parentElement.setAttribute(
@@ -524,14 +484,6 @@ class PopUp extends Data {
     for (let i = 0; i < loop_popup; i++) {
       if (this.select_popup_body()[i] || !e.target.classList.contains("save")) {
         if (
-          e.target.classList.contains("field") &&
-          !e.target.classList.contains("mark") &&
-          this.select_popup_body()[i] == null
-        ) {
-          this.create_popup(e, 100, '+');
-          this.create_popup(e, 150, '+');
-          this.create_popup(e, 200, '+');
-        } else if (
           (e.target.id == "field" ||
             e.target.classList.contains("field") ||
             e.target.className == "popup_body") &&
@@ -557,23 +509,12 @@ class PopUp extends Data {
       for (let j = 0; j < loop_display; j++) {
         if (
           e.target.className == "popup_button" &&
-          this.select_popup_input()[i].value &&
-          Number.isInteger(parseInt(this.select_popup_input()[i].value))
+          this.select_popup_input()[i].value
         ) {
           let value = this.select_popup_input()[i].value;
           let node = this.select_popup_body()[i].parentElement;
           this.save_data(node, value);
           this.create_display_popup(node, value);
-          break;
-        } else if (
-          e.target.className == "popup_button" &&
-          this.select_popup_input()[i].value &&
-          !Number.isInteger(parseInt(this.select_popup_input()[i].value))
-        ) {
-          this.select_popup_body()[i].style.backgroundColor =
-            "rgba(255, 150, 150, 0.5)";
-          let random_int = D.getRandomInt(0, 100);
-          this.select_popup_input()[i].value = random_int;
           break;
         } else if (
           (e.target.className == "popup_body" ||
@@ -612,7 +553,15 @@ class PopUp extends Data {
           this.remove_popup(true, e.target);
           this.delete_data(node);
           node.setAttribute("class", "node draggable field");
+          this.step_size_new_field_popup = 150;
+          this.create_popup(e.target.parentElement, this.step_size_new_field_popup);
           break;
+        } else if (
+          e.target.className == "create_field_popup" &&
+          e.target.parentElement.classList.contains("field")
+        ) {
+          this.create_popup(e.target.parentElement, this.step_size_new_field_popup);
+          this.step_size_new_field_popup += 50;
         }
         break;
       }
@@ -631,183 +580,6 @@ class PopUp extends Data {
 
 var PU = new PopUp();
 PU.processing_popup();
-
-class SetWeight {
-  constructor(node_1, node_2) {
-    this.node_1 = node_1;
-    this.node_2 = node_2;
-  }
-
-  select_display_weight() {
-    return document.getElementsByClassName("display_weight");
-  }
-
-  select_popup_weight() {
-    return document.getElementsByClassName("popup_weight");
-  }
-
-  select_weight_button() {
-    return document.getElementsByClassName("weight_button");
-  }
-
-  select_weight_input_1() {
-    return document.getElementsByClassName("weight_input_1");
-  }
-
-  select_weight_input_2() {
-    return document.getElementsByClassName("weight_input_2");
-  }
-
-  remove_weight() {
-    for (let i = this.select_display_weight().length - 1; i >= 0; i--) {
-      if (this.select_display_weight()[i]) {
-        this.select_display_weight()[i].remove();
-      }
-    }
-    let values = Object.values(localStorage);
-    for (let i = 0; i < localStorage.length; i++) {
-      values[i] = values[i].split(",").slice(0, 3);
-      localStorage.setItem(localStorage.key(i), values[i]);
-    }
-  }
-
-  create_weight() {
-    let body_canvas = document.getElementById("field");
-    let popup_weight = document.createElement("DIV");
-    popup_weight.setAttribute("class", "popup_weight");
-
-    let existing = CLN.get_existing_localStorage(this.node_1);
-    let start_pos = CLN.get_pos_node(existing);
-    existing = CLN.get_existing_localStorage(this.node_2);
-    let line_coord = CLN.get_pos_node(existing);
-
-    popup_weight.style.top =
-      ((parseInt(start_pos.y) + parseInt(line_coord.y)) / 2 + 155).toString() +
-      "px";
-    popup_weight.style.left =
-      ((parseInt(start_pos.x) + parseInt(line_coord.x)) / 2 + 60).toString() +
-      "px";
-    body_canvas.after(popup_weight);
-
-    let weight_input_1 = document.createElement("INPUT");
-    weight_input_1.setAttribute("class", "weight_input_1");
-    popup_weight.appendChild(weight_input_1);
-    weight_input_1.defaultValue = "from...";
-    weight_input_1.focus();
-
-    let weight_input_2 = document.createElement("INPUT");
-    weight_input_2.setAttribute("class", "weight_input_2");
-    popup_weight.appendChild(weight_input_2);
-    weight_input_2.defaultValue = "to...";
-
-    let weight_button = document.createElement("BUTTON");
-    weight_button.setAttribute("class", "weight_button");
-    popup_weight.appendChild(weight_button);
-    weight_button.innerHTML = "save";
-  }
-
-  create_display_weight(value_1, value_2) {
-    let body_canvas = document.getElementById("field");
-    let display_weight = document.createElement("DIV");
-    display_weight.textContent = this.node_1 + ": " + value_1 + " -> " + this.node_2 + ": " + value_2;
-    display_weight.setAttribute("class", "display_weight");
-
-    let existing = CLN.get_existing_localStorage(this.node_1);
-    let start_pos = CLN.get_pos_node(existing);
-    existing = CLN.get_existing_localStorage(this.node_2);
-    let line_coord = CLN.get_pos_node(existing);
-
-    display_weight.style.top =
-      ((parseInt(start_pos.y) + parseInt(line_coord.y)) / 2 + 155).toString() +
-      "px";
-    display_weight.style.left =
-      ((parseInt(start_pos.x) + parseInt(line_coord.x)) / 2).toString() +
-      "px";
-    body_canvas.after(display_weight);
-  }
-
-  save_weight(value_1, value_2) {
-    let existing_node_1 = CLN.get_existing_localStorage(this.node_1);
-    existing_node_1.push(value_1);
-    localStorage.setItem(this.node_1, existing_node_1.toString());
-    let existing_node_2 = CLN.get_existing_localStorage(this.node_2);
-    existing_node_2.push(value_2);
-    localStorage.setItem(this.node_2, existing_node_2.toString());
-  }
-
-  one_click_proc(e) {
-    let loop_weight = this.select_popup_weight().length;
-    if (loop_weight == 0) {
-      loop_weight = 1;
-    }
-    for (let i = 0; i < loop_weight; i++) {
-      if (e.target.className == "weight_button") {
-        if (
-          Number.isInteger(parseInt(SW.select_weight_input_1()[i].value)) &&
-          Number.isInteger(parseInt(SW.select_weight_input_2()[i].value))
-        ) {
-          let value_1 = this.select_weight_input_1()[i].value;
-          let value_2 = this.select_weight_input_2()[i].value;
-          e.target.parentElement.remove();
-          this.create_display_weight(value_1, value_2);
-          this.save_weight(value_1, value_2);
-        } else if (
-          Number.isInteger(parseInt(SW.select_weight_input_1()[i].value)) &&
-          SW.select_weight_input_2()[i].value == "to..."
-        ) {
-          let value_1 = this.select_weight_input_1()[i].value;
-          let value_2 = "0";
-          e.target.parentElement.remove();
-          this.create_display_weight(value_1, value_2);
-          this.save_weight(value_1, value_2);
-        } else if (
-          SW.select_weight_input_1()[i].value == "from..." &&
-          Number.isInteger(parseInt(SW.select_weight_input_2()[i].value))
-        ) {
-          let value_1 = "0";
-          let value_2 = this.select_weight_input_2()[i].value;
-          e.target.parentElement.remove();
-          this.create_display_weight(value_1, value_2);
-          this.save_weight(value_1, value_2);
-        } else if (
-          SW.select_weight_input_1()[i].value == "from..." &&
-          SW.select_weight_input_2()[i].value == "to..."
-        ) {
-          let value_1 = "0";
-          let value_2 = "0";
-          e.target.parentElement.remove();
-          this.create_display_weight(value_1, value_2);
-          this.save_weight(value_1, value_2);
-        } else {
-          this.select_popup_weight()[i].style.backgroundColor =
-            "rgba(255, 150, 150, 0.5)";
-          let random_int = D.getRandomInt(0, 100);
-          this.select_weight_input_1()[i].value = random_int;
-          random_int = D.getRandomInt(0, 100);
-          this.select_weight_input_2()[i].value = random_int;
-        }
-        break;
-      } else if (e.target.className == "weight_input_1" || e.target.className == "weight_input_2") {
-        e.target.defaultValue = "";
-        e.target.focus();
-      }
-    }
-    if (e.target.id == "deleted_all_edges") {
-      this.remove_weight();
-      CLN.clear_canvas();
-      CLN.pair_nodes = [];
-    }
-  }
-
-  processing_weight() {
-    document.body.addEventListener("click", function (e) {
-      SW.one_click_proc(e);
-    });
-  }
-}
-
-var SW = new SetWeight(null, null);
-SW.processing_weight();
 
 class DrawLine {
   constructor(canvas_elem, context) {

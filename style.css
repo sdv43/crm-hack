@@ -30,7 +30,7 @@ body {
 }
 
 .node {
-    width: 50px;
+    width: 200px;
     height: 50px;
     float: right;
     background-size: 100%;
@@ -153,14 +153,14 @@ body {
 }
 
 .popup_button {
-  position: absolute;
+  position: relative;
   width: 25px;
   height: 25px;
   border-radius: 50%;
   color:white;
   background-color: rgb(98, 226, 98);
-  top: 10px;
-  left: 120px;
+  top: 5px;
+  left: -45px;
 }
 
 .display_weight {
@@ -242,6 +242,8 @@ button.card {
   color: rgb(0, 0, 0);
   border-radius: 10%;
   transition: 0.5s;
+  left: 80px;
+  top: 5px;
 }
 
 #buttonStartСalc {
