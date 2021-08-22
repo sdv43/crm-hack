@@ -1,4 +1,6 @@
-"use strict;";
+/* eslint-disable */
+import '@/assets/tailwind.css';
+import '@/assets/editor.scss';
 
 class MainPage {
   constructor() { }
@@ -18,43 +20,41 @@ class TopSetting extends MainPage {
     this.count_node = count_node;
   }
 
+  clear_node(n){
+    function clearInner(node) {
+      while (node.hasChildNodes()) {
+        clear(node.firstChild);
+      }
+    }
+
+    function clear(node) {
+      while (node.hasChildNodes()) {
+        clear(node.firstChild);
+      }
+      node.parentNode.removeChild(node);
+      console.log(node, "cleared!");
+    }
+    clearInner(n);
+  }
+
   handler_start() {
     document.body.addEventListener("click", function (e) {
-      let num_option_node = e.target.id.split('_')[1];
-
       if (e.target.id.startsWith("btnOptionsNode")) {
-        document.getElementById("start_dropdown_" + num_option_node).classList.toggle("show");
-      };
+        document.getElementById(e.target.id).classList.toggle("show");
+      }
+      if (e.target.id == "add_node") {
+        new BottomPanelTools().create_set_nodes(1);
+      } else if (e.target.id == "delete_node") {
+        clear_node(e.target.parentElement)
+      }
 
-      function clear_node(n){
-        function clearInner(node) {
-          while (node.hasChildNodes()) {
-            clear(node.firstChild);
-          }
-        }
-
-        function clear(node) {
-          while (node.hasChildNodes()) {
-            clear(node.firstChild);
-          }
-          node.parentNode.removeChild(node);
-        }
-        clearInner(n);
-      };
-
-      if (e.target.parentElement.id == "start_dropdown_" + num_option_node && !e.target.matches(".interface")) {
+      if (e.target.parentElement.id == "start_dropdown" && !e.target.matches(".interface")) {
         let dropdowns = document.getElementsByClassName("dropdown-content");
         for (let i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].classList.contains('show')) {
             dropdowns[i].classList.remove('show');
           }
         }
-      }
-
-      if (e.target.id == "add_node") {
-        new BottomPanelTools().create_set_nodes(1);
-      } else if (e.target.id == "delete_node") {
-        clear_node(e.target.parentElement.parentElement.parentElement.parentElement)
       }
     });
   }
@@ -129,7 +129,7 @@ class BottomPanelTools extends MainPage {
     new_div_menu_dropdown_btn.innerHTML = "+";
     new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
     let new_div_menu_start_dropdown = document.createElement("DIV");
-    new_div_menu_start_dropdown.setAttribute("id", "start_dropdown_" + current_num_node.toString());
+    new_div_menu_start_dropdown.setAttribute("id", "start_dropdown");
     new_div_menu_start_dropdown.setAttribute("class", "dropdown-content");
     new_div_menu_dropdown_btn.after(new_div_menu_start_dropdown);
     let new_div_menu_a_add_node = document.createElement("A");
@@ -434,7 +434,7 @@ class PopUp extends Data {
               "data-id"
             ) == null ||
             this.select_display_body()
-            [i].parentElement.getAttribute("data-id")
+              [i].parentElement.getAttribute("data-id")
               .toString() == elem.getAttribute("data-id").toString()
           ) {
             this.select_display_body()[i].parentElement.setAttribute(
@@ -454,7 +454,7 @@ class PopUp extends Data {
             this.select_popup_body()[i].parentElement.getAttribute("data-id") ==
             null ||
             this.select_popup_body()
-            [i].parentElement.getAttribute("data-id")
+              [i].parentElement.getAttribute("data-id")
               .toString() == elem.getAttribute("data-id").toString()
           ) {
             this.select_popup_body()[i].parentElement.setAttribute(
@@ -529,7 +529,6 @@ class PopUp extends Data {
       for (let j = 0; j < loop_display; j++) {
         if (
           e.target.className == "popup_button" &&
-          this.select_popup_input()[i] != undefined &&
           this.select_popup_input()[i].value
         ) {
           let value = this.select_popup_input()[i].value;
@@ -540,7 +539,6 @@ class PopUp extends Data {
         } else if (
           (e.target.className == "popup_body" ||
             e.target.className == "popup_button") &&
-            this.select_popup_input()[i] != undefined &&
           !this.select_popup_input()[i].value
         ) {
           this.select_popup_body()[i].style.backgroundColor =
@@ -577,7 +575,7 @@ class PopUp extends Data {
           node.setAttribute("class", "node draggable field");
           let node_bases = document.getElementsByClassName("node draggable");
           for (let i = 0; i < node_bases.length; i++){
-            new BottomPanelTools().create_min_menu(node_bases[i], i);
+            new BottomPanelTools().create_min_menu(node_bases[i]);
           }
           break;
         } else if (
@@ -626,8 +624,8 @@ class DrawLine {
     line_coord = this.line_coordinate
   ) {
     this.context.beginPath();
-    this.context.moveTo(start_pos.x, start_pos.y - 20);
-    this.context.lineTo(line_coord.x, line_coord.y - 20);
+    this.context.moveTo(start_pos.x, start_pos.y);
+    this.context.lineTo(line_coord.x, line_coord.y);
     this.context.stroke();
   }
 
