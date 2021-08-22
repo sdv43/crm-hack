@@ -4,7 +4,7 @@
       Вопрос:
     </div>
     <p :class="$style.text">
-      Да, можем предложить щебень по 500 руб., но объем отгрузки будет от 30 тонн.
+      {{ text }}
     </p>
   </section>
 </template>
@@ -12,6 +12,13 @@
 <script>
 export default {
   name: 'CardStepText',
+
+  props: {
+    text: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 

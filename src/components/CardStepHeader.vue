@@ -1,12 +1,20 @@
 <template>
   <header :class="$style.root">
     <nav :class="$style.navigation">
-      <button :class="[$style.action, $style['to-prev-step']]">
+      <button
+        :class="[$style.action, $style['to-prev-step']]"
+        @click="toPrevStep"
+      >
         &larr; пред. шаг
       </button>
-      <button :class="$style.action">
+
+      <button
+        :class="$style.action"
+        @click="toFirstStep"
+      >
         на первый шаг
       </button>
+
       <button
         :class="[
           $style.action,
@@ -44,6 +52,14 @@ export default {
       e.id = 'script-list';
 
       this.$root.$emit('modal::toggle', e);
+    },
+
+    toPrevStep() {
+      this.$store.dispatch('operatorCard/toPrevStep');
+    },
+
+    toFirstStep() {
+      this.$store.dispatch('operatorCard/toFirstStep');
     },
   },
 };

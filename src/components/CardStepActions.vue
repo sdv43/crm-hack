@@ -1,14 +1,39 @@
 <template>
   <div :class="$style.root">
-    <button :class="$style.button">Согласен</button>
-    <button :class="$style.button">Слишком дорого</button>
-    <button :class="$style.button">Не согласен</button>
+    <button
+      v-for="action in actions"
+      :key="action.name"
+      :class="$style.button"
+      @click="handleAction(action.action, action.params)"
+    >
+      {{ action.name }}
+    </button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'CardStepActions',
+
+  props: {
+    actions: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  methods: {
+    handleAction(action, params) {
+      switch (action) {
+        case 'next-step':
+          this.$store.dispatch('operatorCard/toStep', params);
+          break;
+
+        default:
+          break;
+      }
+    },
+  },
 };
 </script>
 
