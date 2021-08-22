@@ -85,8 +85,7 @@ export default {
 .root {
   @apply absolute rounded-lg shadow-2xl bg-white;
 
-  min-width: 120px;
-  min-height: 120px;
+  min-width: 180px;
 
   &.opened {
     @apply block;
