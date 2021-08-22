@@ -17,13 +17,9 @@
         data-modal-action
       >
         <img src="@/assets/icons/phone_forwarded_white_24dp.svg" alt="null"/>
-        <Modal
-          id="call-forwarding"
-          :class="$style['forwarding-modal']"
-        >
-          modal content
-        </Modal>
+        <ModalForwarding/>
       </button>
+
       <button
         :class="[
         $style.action,
@@ -34,6 +30,7 @@
         <img v-show="mute" src="@/assets/icons/mic_off_white_24dp.svg" alt="null"/>
         <img v-show="!mute" src="@/assets/icons/mic_white_24dp.svg" alt="null"/>
       </button>
+
       <button
         :class="[
           $style.action,
@@ -54,11 +51,11 @@ import { mapState } from 'vuex';
 import {
   CALL_FINISHED, CALL_TALKING, CALL_ENDING, CALL_IN_PROGRESS,
 } from '@/store/modules/operatorCard/constants';
-import Modal from '@/components/Modal.vue';
+import ModalForwarding from '@/components/ModalForwarding.vue';
 
 export default {
   name: 'CardHeader',
-  components: { Modal },
+  components: { ModalForwarding },
   data() {
     return {
       mute: false,
@@ -164,10 +161,6 @@ export default {
     &.mic-off {
       @apply bg-red-500;
     }
-  }
-
-  .forwarding-modal {
-    transform: translateY(calc(50% + 32px));
   }
 }
 </style>

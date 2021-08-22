@@ -83,7 +83,7 @@ export default {
 
 <style lang="scss" module>
 .root {
-  @apply absolute rounded-lg shadow-xl bg-white;
+  @apply absolute rounded-lg shadow-2xl bg-white;
 
   min-width: 120px;
   min-height: 120px;
