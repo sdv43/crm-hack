@@ -246,10 +246,10 @@ button.card {
   top: 5px;
 }
 
-#buttonStartСalc {
+#btnOptionsNode {
   min-width: 10px;
 }
-#buttonStartСalc:hover:after {
+#btnOptionsNode:hover:after {
   height: calc(100% - 5px);
   top: calc(45px);
   width: calc(100% + 45px);

@@ -20,9 +20,12 @@ class TopSetting extends MainPage {
 
   handler_start() {
     document.body.addEventListener("click", function (e) {
-      if (e.target.id == "strong_connect") {
-        console.log(2);
-      } else if (e.target.id == "line_prog") {
+      if (e.target.id == "btnOptionsNode") {
+        document.getElementById("start_dropdown").classList.toggle("show");
+      }
+      if (e.target.id == "add_node") {
+        new BottomPanelTools().create_set_nodes(1);
+      } else if (e.target.id == "delete_node") {
         console.log(2);
       }
 
@@ -103,21 +106,21 @@ class BottomPanelTools extends MainPage {
     new_div_menu_dropdown = this.btn_create_new_field(new_div_menu_dropdown);
     let new_div_menu_dropdown_btn = document.createElement("BUTTON");
     new_div_menu_dropdown_btn.setAttribute("class", "card");
-    new_div_menu_dropdown_btn.setAttribute("id", "buttonStartСalc");
+    new_div_menu_dropdown_btn.setAttribute("id", "btnOptionsNode");
     new_div_menu_dropdown_btn.innerHTML = "+";
     new_div_menu_dropdown.appendChild(new_div_menu_dropdown_btn);
     let new_div_menu_start_dropdown = document.createElement("DIV");
     new_div_menu_start_dropdown.setAttribute("id", "start_dropdown");
     new_div_menu_start_dropdown.setAttribute("class", "dropdown-content");
     new_div_menu_dropdown_btn.after(new_div_menu_start_dropdown);
-    let new_div_menu_a_strong_connect = document.createElement("A");
-    new_div_menu_a_strong_connect.setAttribute("id", "strong_connect");
-    new_div_menu_a_strong_connect.innerHTML = "Add Field";
-    new_div_menu_start_dropdown.appendChild(new_div_menu_a_strong_connect);
-    let new_div_menu_a_line_prog = document.createElement("A");
-    new_div_menu_a_line_prog.setAttribute("id", "line_prog");
-    new_div_menu_a_line_prog.innerHTML = "Delete";
-    new_div_menu_a_strong_connect.after(new_div_menu_a_line_prog);
+    let new_div_menu_a_add_node = document.createElement("A");
+    new_div_menu_a_add_node.setAttribute("id", "add_node");
+    new_div_menu_a_add_node.innerHTML = "Add Field";
+    new_div_menu_start_dropdown.appendChild(new_div_menu_a_add_node);
+    let new_div_menu_a_delete_node = document.createElement("A");
+    new_div_menu_a_delete_node.setAttribute("id", "delete_node");
+    new_div_menu_a_delete_node.innerHTML = "Delete";
+    new_div_menu_a_add_node.after(new_div_menu_a_delete_node);
     return new_div;
   }
 
@@ -551,10 +554,9 @@ class PopUp extends Data {
           this.remove_popup(true, e.target);
           this.delete_data(node);
           node.setAttribute("class", "node draggable field");
-          this.step_size_new_field_popup = 100;
           let node_bases = document.getElementsByClassName("node draggable");
           for (let i = 0; i < node_bases.length; i++){
-            this.create_popup(node_bases[i], this.step_size_new_field_popup);
+            new BottomPanelTools().create_min_menu(node_bases[i]);
           }
           break;
         } else if (
