@@ -469,7 +469,7 @@ class PopUp extends Data {
     }
   }
 
-  create_popup(build_start, offset) {
+  create_popup(build_start, offset, field_name) {
     let popup_body = document.createElement("DIV");
     popup_body.setAttribute("class", "popup_body");
     build_start.appendChild(popup_body);
@@ -486,6 +486,7 @@ class PopUp extends Data {
     popup_input.setAttribute("class", "popup_input");
     popup_body.appendChild(popup_input);
     popup_input.focus();
+    popup_input.value = field_name;
 
     for (let i = 0; i < this.select_popup_body().length; i++) {
       this.select_popup_body()[i].parentElement.setAttribute(
@@ -584,7 +585,7 @@ class PopUp extends Data {
           e.target.className == "create_field_popup" &&
           e.target.parentElement.classList.contains("field")
         ) {
-          this.create_popup(e.target.parentElement, this.step_size_new_field_popup);
+          this.create_popup(e.target.parentElement, this.step_size_new_field_popup, 'text');
           this.step_size_new_field_popup += 50;
         }
         break;
