@@ -19,17 +19,12 @@
 
         <div :class="$style['actions-container']">
           <div :class="$style.action">
-            <span class="mr-auto">Согласен</span>
+            <span class="mr-auto">Позитивный отзыв</span>
             <img src="@/assets/icons/edit_black_24dp.svg" height="20" width="20"/>
             <img src="@/assets/icons/delete_black_24dp.svg" height="20" width="20"/>
           </div>
           <div :class="$style.action">
-            <span class="mr-auto">Дорого</span>
-            <img src="@/assets/icons/edit_black_24dp.svg" height="20" width="20"/>
-            <img src="@/assets/icons/delete_black_24dp.svg" height="20" width="20"/>
-          </div>
-          <div :class="$style.action">
-            <span class="mr-auto">Отказался</span>
+            <span class="mr-auto">Негативный отзыв</span>
             <img src="@/assets/icons/edit_black_24dp.svg" height="20" width="20"/>
             <img src="@/assets/icons/delete_black_24dp.svg" height="20" width="20"/>
           </div>
