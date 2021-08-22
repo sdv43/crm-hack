@@ -35,7 +35,6 @@ export default {
         { label: 'Возраст', key: 'age' },
         { label: 'Мобильный телефон', key: 'phoneMobile' },
         { label: 'Рабочий телефон', key: 'phoneWork' },
-        { label: 'Возраст', key: 'age' },
         { label: 'Есть кредит', key: 'hasCredit' },
         { label: 'Есть сретификат COVID-19', key: 'hasCovidCert' },
         { label: 'Зарплата', key: 'salary' },

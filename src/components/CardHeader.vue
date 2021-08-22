@@ -11,8 +11,18 @@
     </div>
 
     <div :class="$style.actions">
-      <button :class="$style.action">
+      <button
+        :class="$style.action"
+        @click="callForwardingToggle($event)"
+        data-modal-action
+      >
         <img src="@/assets/icons/phone_forwarded_white_24dp.svg" alt="null"/>
+        <Modal
+          id="call-forwarding"
+          :class="$style['forwarding-modal']"
+        >
+          modal content
+        </Modal>
       </button>
       <button
         :class="[
@@ -44,10 +54,11 @@ import { mapState } from 'vuex';
 import {
   CALL_FINISHED, CALL_TALKING, CALL_ENDING, CALL_IN_PROGRESS,
 } from '@/store/modules/operatorCard/constants';
+import Modal from '@/components/Modal.vue';
 
 export default {
   name: 'CardHeader',
-
+  components: { Modal },
   data() {
     return {
       mute: false,
@@ -98,6 +109,12 @@ export default {
         }, 2500);
       }
     },
+
+    callForwardingToggle(e) {
+      e.id = 'call-forwarding';
+
+      this.$root.$emit('modal::toggle', e);
+    },
   },
 };
 </script>
@@ -147,6 +164,10 @@ export default {
     &.mic-off {
       @apply bg-red-500;
     }
+  }
+
+  .forwarding-modal {
+    transform: translateY(calc(50% + 32px));
   }
 }
 </style>

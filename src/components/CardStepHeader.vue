@@ -7,8 +7,22 @@
       <button :class="$style.action">
         на первый шаг
       </button>
-      <button :class="[$style.action, $style['to-script-list']]">
+      <button
+        :class="[
+          $style.action,
+          $style['to-script-list']
+        ]"
+        @click="scriptListToggle($event)"
+        data-modal-action
+      >
         к скписку скриптов
+
+        <Modal
+          id="script-list"
+          :class="$style['script-list-modal']"
+        >
+          modal content
+        </Modal>
       </button>
     </nav>
 
@@ -19,8 +33,19 @@
 </template>
 
 <script>
+import Modal from '@/components/Modal.vue';
+
 export default {
   name: 'CardStepHeader',
+  components: { Modal },
+
+  methods: {
+    scriptListToggle(e) {
+      e.id = 'script-list';
+
+      this.$root.$emit('modal::toggle', e);
+    },
+  },
 };
 </script>
 
@@ -40,6 +65,10 @@ export default {
 
   .to-script-list {
     @apply ml-auto;
+  }
+
+  .script-list-modal {
+    transform: translateY(15px);
   }
 }
 

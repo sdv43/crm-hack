@@ -32,7 +32,7 @@ export default {
 
 <style lang="scss" module>
 .root {
-  @apply min-h-full flex flex-col justify-start items-stretch;
+  @apply relative min-h-full flex flex-col justify-start items-stretch;
 }
 
 .content {
