@@ -25,12 +25,7 @@
       >
         к скписку скриптов
 
-        <Modal
-          id="script-list"
-          :class="$style['script-list-modal']"
-        >
-          modal content
-        </Modal>
+        <ModalScriptList/>
       </button>
     </nav>
 
@@ -41,11 +36,11 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal.vue';
+import ModalScriptList from '@/components/ModalScriptList.vue';
 
 export default {
   name: 'CardStepHeader',
-  components: { Modal },
+  components: { ModalScriptList },
 
   methods: {
     scriptListToggle(e) {
@@ -81,10 +76,6 @@ export default {
 
   .to-script-list {
     @apply ml-auto;
-  }
-
-  .script-list-modal {
-    transform: translateY(15px);
   }
 }
 
