@@ -7,7 +7,7 @@
       Выберите скрипт:
     </header>
 
-    <ul :class="$style.menu">
+    <ul @click="close" :class="$style.menu">
       <li :class="$style.item">Кредит</li>
       <li :class="$style.item">Страховка</li>
       <li :class="$style.item">Мобильная связь</li>
@@ -20,7 +20,14 @@ import Modal from '@/components/Modal.vue';
 
 export default {
   name: 'ModalScriptList',
+
   components: { Modal },
+
+  methods: {
+    close() {
+      this.$root.$emit('modal::close', { id: 'script-list', path: [] });
+    },
+  },
 };
 </script>
 

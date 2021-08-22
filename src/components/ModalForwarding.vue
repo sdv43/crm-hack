@@ -7,7 +7,7 @@
       Перевод звонка в:
     </header>
 
-    <ul :class="$style.menu">
+    <ul @click="close" :class="$style.menu">
       <li :class="$style.item">Отдел продаж</li>
       <li :class="$style.item">Главный менеджер</li>
       <li :class="$style.item">Служба безопасности</li>
@@ -20,7 +20,14 @@ import Modal from '@/components/Modal.vue';
 
 export default {
   name: 'ModalForwarding',
+
   components: { Modal },
+
+  methods: {
+    close() {
+      this.$root.$emit('modal::close', { id: 'call-forwarding', path: [] });
+    },
+  },
 };
 </script>
 
