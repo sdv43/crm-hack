@@ -37,15 +37,35 @@ const stateOperatorCard = {
             name: 'Yes',
             action: 'next-step',
             params: {
-              id: 2,
+              id: 3,
             },
           },
           {
             name: 'No',
             action: 'next-step',
             params: {
-              id: 2,
+              id: 3,
             },
+          },
+        ],
+
+        steps: [
+          {
+            id: 3,
+            name: '',
+            text: 'Step 3',
+
+            actions: [
+              {
+                name: 'finish',
+                action: 'next-step',
+                params: {
+                  id: 3,
+                },
+              },
+            ],
+
+            steps: [],
           },
         ],
       },
