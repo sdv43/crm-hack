@@ -5,7 +5,10 @@
         <router-link :to="{name:'OperatorCard'}">Operator Card</router-link>
       </li>
       <li :class="$style.link">
-        <a href="/editor.html">Script Editor</a>
+        <router-link :to="{name:'ScriptEditor'}">Script Editor</router-link>
+      </li>
+      <li :class="$style.link">
+        <a href="/editor.html">Script Editor (Nekit)</a>
       </li>
     </ul>
   </section>

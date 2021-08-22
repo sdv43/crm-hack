@@ -7,12 +7,5 @@ module.exports = {
       title: 'Crm Hack Umeem',
       chunks: ['chunk-vendors', 'chunk-common', 'index'],
     },
-
-    editor: {
-      entry: 'src/editor.js',
-      template: 'public/editor.html',
-      filename: 'editor.html',
-      title: 'Редактор скрипта',
-    },
   },
 };
