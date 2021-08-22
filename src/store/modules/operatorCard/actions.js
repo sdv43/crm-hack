@@ -1,4 +1,12 @@
+import scriptEx from '@/store/modules/operatorCard/script-example';
+
 const actionsOperatorCard = {
+  init({ state }) {
+    const script = localStorage.getItem('script');
+
+    state.step = script ? JSON.parse(script) : scriptEx;
+  },
+
   toStep({ state }, payload) {
     state.history.push(state.step);
     state.step = state.step.steps.find((s) => s.id === payload.id);
