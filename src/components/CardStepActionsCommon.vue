@@ -18,6 +18,9 @@
               <option>30 минут</option>
               <option>1 час</option>
               <option>3 часа</option>
+              <option>Завтра</option>
+              <option>1 неделя</option>
+              <option>1 месяц</option>
             </select>
           </div>
 
